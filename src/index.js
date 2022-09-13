@@ -4,7 +4,6 @@ import api, { route } from '@forge/api';
 const resolver = new Resolver();
 
 const getPages = async () => {
-	// console.log('Before');
 	const response = await api
 		.asUser()
 		.requestConfluence(route`/wiki/rest/api/space/BC/content`, {
@@ -12,7 +11,6 @@ const getPages = async () => {
 				Accept: 'application/json',
 			},
 		});
-	// console.log('after: ', response);
 
 	const data = await response.json();
 	console.log(data.page.results);
@@ -21,15 +19,13 @@ const getPages = async () => {
 };
 
 resolver.define('getText', (req) => {
-	// console.log(req);
-	let obj = getPages();
-	console.log(obj);
+	console.log(req);
 
-	return obj;
+	return 'Here is the raw page data of this space:';
 });
 
 resolver.define('getPages', (req) => {
-	// console.log(req);
+	console.log(req);
 
 	// console.log(getPages());
 	return getPages();

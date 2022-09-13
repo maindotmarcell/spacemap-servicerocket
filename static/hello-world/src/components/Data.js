@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { invoke } from '@forge/bridge';
 
 function Data() {
-    return (
-        <div><h1>Rocket Peeps Test</h1></div>
-    )
+	const [pages, setPages] = useState(null);
+
+	useEffect(() => {
+		invoke('getPages').then((pagesJSON) => {
+			console.log(pagesJSON);
+			setPages(JSON.stringify(pagesJSON));
+		});
+	}, []);
+
+	return <div>{pages ? pages : 'Loading...'}</div>;
 }
 
 export default Data;
