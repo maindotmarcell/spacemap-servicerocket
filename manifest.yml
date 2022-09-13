@@ -1,0 +1,18 @@
+modules:
+  confluence:spaceSettings:
+    - key: birdview-service-rocket-hello-world
+      resource: main
+      resolver:
+        function: resolver
+      title: Birdview-Service_Rocket
+  function:
+    - key: resolver
+      handler: index.handler
+resources:
+  - key: main
+    path: static/hello-world/build
+app:
+  id: ari:cloud:ecosystem::app/9574d15a-4d6a-466b-b4bb-a38d39a0e1fb
+permissions:
+  scopes:
+    - read:confluence-content.summary

@@ -1,0 +1,12 @@
+{
+  "name": "confluence-space-settings-custom-ui",
+  "version": "1.0.3",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+  },
+  "dependencies": {
+    "@forge/resolver": "^1.4.4"
+  }
+}
