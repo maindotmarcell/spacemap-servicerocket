@@ -11,7 +11,10 @@ function Data() {
 		});
 	}, []);
 
-	return <div>{pages ? pages : 'Loading...'}</div>;
+	// return <div>{pages ? pages : 'Loading...'}</div>;
+	return <div>
+		<h1>Page data can be found in the console (Dev Tools)</h1>
+	</div>
 }
 
 export default Data;

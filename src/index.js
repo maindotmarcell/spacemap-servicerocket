@@ -13,13 +13,13 @@ const getPages = async () => {
 		});
 
 	const data = await response.json();
-	console.log(data.page.results);
+	// console.log(data.page.results);
 	return data.page.results;
 	// return response.status;
 };
 
 resolver.define('getText', (req) => {
-	console.log(req);
+	// console.log(req);
 
 	return 'Here is the raw page data of this space:';
 });
