@@ -25,7 +25,7 @@ resolver.define('getText', (req) => {
 });
 
 resolver.define('getPages', (req) => {
-	console.log(req);
+	// console.log(req);
 
 	// console.log(getPages());
 	return getPages();
