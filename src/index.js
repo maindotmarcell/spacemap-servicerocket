@@ -6,11 +6,14 @@ const resolver = new Resolver();
 const getPages = async () => {
 	const response = await api
 		.asUser()
-		.requestConfluence(route`/wiki/rest/api/space/BC/content`, {
-			headers: {
-				Accept: 'application/json',
-			},
-		});
+		.requestConfluence(
+			route`/wiki/rest/api/space/BC/content?type=page&expand=children.page,ancestors&limit=100&status=current`,
+			{
+				headers: {
+					Accept: 'application/json',
+				},
+			}
+		);
 
 	const data = await response.json();
 	// console.log(data.page.results);
