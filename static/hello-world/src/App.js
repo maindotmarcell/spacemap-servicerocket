@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { invoke } from '@forge/bridge';
-import Data from './components/Data';
+import Data from './data/Data';
 import Tree from './components/Tree';
 import './App.css';
+import LayoutFlow from './components/Dagre';
 
 function App() {
-	const [data, setData] = useState(null);
-
-	useEffect(() => {
-		invoke('getText').then(setData);
-	}, []);
 
 	return (
 		<div className="App">
 			{/* {data ? data : 'Loading...'} */}
-			<Data />
-			<Tree />
+			{/* <Data /> */}
+			{/* <Tree /> */}
+			<LayoutFlow />
 		</div>
 	);
 }
