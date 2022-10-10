@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { invoke } from '@forge/bridge';
 import Data from './data/Data';
 import Tree from './components/Tree';
 import './App.css';
 import LayoutFlow from './components/Dagre';
+import Form from './components/Form'
 
 function App() {
 
@@ -12,6 +12,8 @@ function App() {
 			{/* {data ? data : 'Loading...'} */}
 			{/* <Data /> */}
 			{/* <Tree /> */}
+			{/* <div><h1>Hello</h1></div> */}
+			<Form />
 			<LayoutFlow />
 		</div>
 	);

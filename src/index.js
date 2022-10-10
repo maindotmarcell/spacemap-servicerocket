@@ -20,11 +20,37 @@ const getPages = async () => {
 	return data.page.results;
 	// return response.status;
 };
+var bodyData = `{
+	"version": {
+	  "number": 2
+	},
+	"type": "page",
+	"title": "bro"
+	}`;
 
-resolver.define('getText', (req) => {
+const changeTitle = async (id, title) => {
+	const response = await api
+		.asApp()
+		.requestConfluence(route`/wiki/rest/api/content/${id}`, {
+			method: 'PUT',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: bodyData,
+		});
+
+	const data = await response.json();
+	// console.log(data.page.results);
+	return data;
+	// return response.status;
+};
+
+resolver.define('changeTitle', ({ payload }) => {
 	// console.log(req);
 
-	return 'Here is the raw page data of this space:';
+	// return `${payload.pageID} ${payload.newTitle}`;
+	return changeTitle(payload.pageID, payload.newTitle);
 });
 
 resolver.define('getPages', (req) => {
@@ -33,5 +59,10 @@ resolver.define('getPages', (req) => {
 	// console.log(getPages());
 	return getPages();
 });
+
+// resolver.define('changeTitle', (req) => {
+// 	// console.log(pageID, newTitle);
+// 	return 'You got it';
+// });
 
 export const handler = resolver.getDefinitions();
