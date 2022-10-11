@@ -1,30 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { invoke } from '@forge/bridge';
 
-function Form() {
+function TitleForm() {
 	const [pageID, setPageID] = useState();
 	const [newTitle, setNewTitle] = useState();
+	const [version, setVersion] = useState();
 
 	function changeTitle(event) {
-        event.preventDefault()
-		invoke('changeTitle',{pageID: pageID, newTitle: newTitle})
+		event.preventDefault();
+		invoke('changeTitle', {
+			pageID: pageID,
+			newTitle: newTitle,
+			version: (parseInt(version) + 1).toString(),
+		})
 			.then((data) => {
-				// console.log(pagesJSON);
-				// setPages(pagesJSON);
 				console.log(data);
 			})
 			.catch((err) => console.log(err));
 	}
-
-    // useEffect(() => {
-	// 	invoke('getText')
-	// 		.then((data) => {
-	// 			// console.log(pagesJSON);
-	// 			// setPages(pagesJSON);
-	// 			console.log(data);
-	// 		})
-	// 		.catch((err) => console.log(err));
-    // },[])
 
 	return (
 		<div>
@@ -41,10 +34,16 @@ function Form() {
 					value={newTitle}
 					onChange={(e) => setNewTitle(e.target.value)}
 				/>
+				<input
+					type="text"
+					placeholder="Version Number"
+					value={version}
+					onChange={(e) => setVersion(e.target.value)}
+				/>
 				<input type="submit" value="submit" />
 			</form>
 		</div>
 	);
 }
 
-export default Form;
+export default TitleForm;

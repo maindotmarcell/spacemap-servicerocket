@@ -42,8 +42,8 @@ const LayoutFlow = () => {
 	const [layoutedNodes, setLayoutedNodes] = useState([]);
 	const [layoutedEdges, setLayoutedEdges] = useState([]);
 
-	console.log('initial: ', initialNodes);
-	console.log('layouted: ', layoutedNodes);
+	// console.log('initial: ', initialNodes);
+	// console.log('layouted: ', layoutedNodes);
 
 	const [nodes, setNodes, onNodesChange] = useNodesState([]);
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);

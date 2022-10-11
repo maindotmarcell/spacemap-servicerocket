@@ -8,7 +8,7 @@ async function Data() {
 	await invoke('getPages').then((pagesJSON) => {
 		// console.log(pagesJSON);
 		pages = pagesJSON;
-		console.log('pages are: ', pages);
+		// console.log('pages are: ', pages);
 		// setPages(pagesJSON);
 	});
 	return pages;

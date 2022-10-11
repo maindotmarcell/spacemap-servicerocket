@@ -3,7 +3,8 @@ import Data from './data/Data';
 import Tree from './components/Tree';
 import './App.css';
 import LayoutFlow from './components/Dagre';
-import Form from './components/Form'
+import TitleForm from './components/TitleForm'
+import MoveForm from './components/MoveForm';
 
 function App() {
 
@@ -13,7 +14,8 @@ function App() {
 			{/* <Data /> */}
 			{/* <Tree /> */}
 			{/* <div><h1>Hello</h1></div> */}
-			<Form />
+			<TitleForm />
+			<MoveForm />
 			<LayoutFlow />
 		</div>
 	);

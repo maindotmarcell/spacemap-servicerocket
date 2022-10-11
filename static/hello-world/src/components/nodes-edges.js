@@ -6,7 +6,7 @@ const edgeType = 'smoothstep';
 
 export async function pageNodes() {
 	const pages = await Pages();
-	console.log(pages);
+	console.log("Pages: ", pages);
 	const pageNodes = pages.map((page) => {
 		const obj = {
 			id: page.id,
