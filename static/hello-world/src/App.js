@@ -3,20 +3,18 @@ import Data from './data/Data';
 import Tree from './components/Tree';
 import './App.css';
 import LayoutFlow from './components/Dagre';
-import TitleForm from './components/TitleForm'
+import TitleForm from './components/TitleForm';
 import MoveForm from './components/MoveForm';
+import { PageProvider } from './PageContext';
 
 function App() {
-
 	return (
 		<div className="App">
-			{/* {data ? data : 'Loading...'} */}
-			{/* <Data /> */}
-			{/* <Tree /> */}
-			{/* <div><h1>Hello</h1></div> */}
-			<TitleForm />
-			<MoveForm />
-			<LayoutFlow />
+			<PageProvider>
+				<TitleForm />
+				<MoveForm />
+				<LayoutFlow />
+			</PageProvider>
 		</div>
 	);
 }

@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { invoke } from '@forge/bridge';
+import PageContext from '../PageContext';
 
 function MoveForm() {
 	const [pageID, setPageID] = useState();
 	const [targetID, setTargetID] = useState();
+
+	const { refreshPages } = useContext(PageContext);
 
 	function movePage(event) {
 		event.preventDefault();
@@ -15,6 +18,7 @@ function MoveForm() {
 				console.log(data);
 			})
 			.catch((err) => console.log(err));
+		refreshPages();
 	}
 
 	return (

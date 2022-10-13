@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import ReactFlow, {
 	addEdge,
 	ConnectionLineType,
@@ -8,6 +8,7 @@ import ReactFlow, {
 	MiniMap,
 } from 'react-flow-renderer';
 import getLayoutedElements from './getLayoutedElements.js';
+import PageContext from '../PageContext.js';
 // import 'reactflow/dist/style.css';
 
 import { pageNodes, pageEdges } from './nodes-edges.js';
@@ -19,6 +20,8 @@ const LayoutFlow = () => {
 	const [initialNodes, setInitialNodes] = useState([]);
 	const [initialEdges, setInitialEdges] = useState([]);
 
+	const { pages } = useContext(PageContext);
+
 	useEffect(() => {
 		async function fetchData() {
 			setInitialNodes(await pageNodes());
@@ -26,7 +29,7 @@ const LayoutFlow = () => {
 		}
 
 		fetchData();
-	}, []);
+	}, [pages]);
 
 	useEffect(() => {
 		const [layoutNodes, layoutEdges] = getLayoutedElements(
@@ -98,4 +101,3 @@ const LayoutFlow = () => {
 };
 
 export default LayoutFlow;
-

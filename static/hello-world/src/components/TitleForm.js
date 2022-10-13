@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { invoke } from '@forge/bridge';
+import PageContext from '../PageContext';
 
 function TitleForm() {
 	const [pageID, setPageID] = useState();
 	const [newTitle, setNewTitle] = useState();
 	const [version, setVersion] = useState();
+
+	const {refreshPages} = useContext(PageContext);
 
 	function changeTitle(event) {
 		event.preventDefault();
@@ -17,6 +20,7 @@ function TitleForm() {
 				console.log(data);
 			})
 			.catch((err) => console.log(err));
+		refreshPages();
 	}
 
 	return (
