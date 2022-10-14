@@ -4,9 +4,9 @@ import Pages from '../data/Pages';
 const position = { x: 0, y: 0 };
 const edgeType = 'smoothstep';
 
-export async function pageNodes() {
-	const pages = await Pages();
-	console.log("Pages: ", pages);
+export function pageNodes(pages) {
+	// const pages = await Pages();
+	// console.log(pages);
 	const pageNodes = pages.map((page) => {
 		const obj = {
 			id: page.id,
@@ -19,8 +19,8 @@ export async function pageNodes() {
 	return pageNodes;
 }
 
-export async function pageEdges() {
-	const pages = await Pages();
+export function pageEdges(pages) {
+	// const pages = await Pages();
 	const pageEdges = [];
 
 	for (let i = 0; i < pages.length; i++) {

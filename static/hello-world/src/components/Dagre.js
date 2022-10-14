@@ -8,8 +8,8 @@ import ReactFlow, {
 	MiniMap,
 } from 'react-flow-renderer';
 import getLayoutedElements from './getLayoutedElements.js';
-import PageContext from '../PageContext.js';
 // import 'reactflow/dist/style.css';
+import PageContext from '../PageContext.js';
 
 import { pageNodes, pageEdges } from './nodes-edges.js';
 
@@ -20,15 +20,23 @@ const LayoutFlow = () => {
 	const [initialNodes, setInitialNodes] = useState([]);
 	const [initialEdges, setInitialEdges] = useState([]);
 
-	const { pages } = useContext(PageContext);
+	const [layoutedNodes, setLayoutedNodes] = useState([]);
+	const [layoutedEdges, setLayoutedEdges] = useState([]);
+
+	const [nodes, setNodes, onNodesChange] = useNodesState([]);
+	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+	const { pages, refreshPages } = useContext(PageContext);
 
 	useEffect(() => {
-		async function fetchData() {
-			setInitialNodes(await pageNodes());
-			setInitialEdges(await pageEdges());
-		}
+		refreshPages();
+	},[]);
 
-		fetchData();
+	useEffect(() => {
+		setInitialNodes(pageNodes(pages));
+		setInitialEdges(pageEdges(pages));
+
+		console.log(pages);
 	}, [pages]);
 
 	useEffect(() => {
@@ -38,19 +46,17 @@ const LayoutFlow = () => {
 		);
 		setLayoutedNodes(layoutNodes);
 		setLayoutedEdges(layoutEdges);
-		setNodes(layoutedNodes);
+		setNodes(layoutNodes);
 		setEdges(layoutEdges);
 	}, [initialNodes, initialEdges]);
 
-	const [layoutedNodes, setLayoutedNodes] = useState([]);
-	const [layoutedEdges, setLayoutedEdges] = useState([]);
 
 	// console.log('initial: ', initialNodes);
 	// console.log('layouted: ', layoutedNodes);
+	// console.log(initialEdges);
 
-	const [nodes, setNodes, onNodesChange] = useNodesState([]);
-	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
+	console.log(nodes);
 	const onConnect = useCallback(
 		(params) =>
 			setEdges((eds) =>
@@ -74,6 +80,8 @@ const LayoutFlow = () => {
 			console.log(layoutedNodes);
 			setNodes([...layoutedNodes]);
 			setEdges([...layoutedEdges]);
+			// setNodes(layoutNodes);
+			// setEdges(layoutEdges);
 		},
 		[nodes, edges]
 	);
