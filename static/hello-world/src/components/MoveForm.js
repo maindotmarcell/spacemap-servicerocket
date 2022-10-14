@@ -8,9 +8,9 @@ function MoveForm() {
 
 	const { refreshPages } = useContext(PageContext);
 
-	function movePage(event) {
+	async function movePage(event) {
 		event.preventDefault();
-		invoke('movePage', {
+		await invoke('movePage', {
 			pageID: pageID,
 			targetID: targetID,
 		})

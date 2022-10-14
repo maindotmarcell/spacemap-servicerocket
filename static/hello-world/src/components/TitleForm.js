@@ -7,11 +7,11 @@ function TitleForm() {
 	const [newTitle, setNewTitle] = useState();
 	const [version, setVersion] = useState();
 
-	const {refreshPages} = useContext(PageContext);
+	const { refreshPages } = useContext(PageContext);
 
-	function changeTitle(event) {
+	async function changeTitle(event) {
 		event.preventDefault();
-		invoke('changeTitle', {
+		await invoke('changeTitle', {
 			pageID: pageID,
 			newTitle: newTitle,
 			version: (parseInt(version) + 1).toString(),

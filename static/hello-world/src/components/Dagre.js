@@ -36,7 +36,7 @@ const LayoutFlow = () => {
 		setInitialNodes(pageNodes(pages));
 		setInitialEdges(pageEdges(pages));
 
-		console.log(pages);
+		// console.log(pages);
 	}, [pages]);
 
 	useEffect(() => {
@@ -56,7 +56,7 @@ const LayoutFlow = () => {
 	// console.log(initialEdges);
 
 
-	console.log(nodes);
+	// console.log(nodes);
 	const onConnect = useCallback(
 		(params) =>
 			setEdges((eds) =>
