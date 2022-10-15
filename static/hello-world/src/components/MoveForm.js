@@ -16,9 +16,9 @@ function MoveForm() {
 		})
 			.then((data) => {
 				console.log(data);
+				refreshPages();
 			})
 			.catch((err) => console.log(err));
-		refreshPages();
 	}
 
 	return (

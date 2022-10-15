@@ -12,6 +12,8 @@ export function pageNodes(pages) {
 			id: page.id,
 			data: { label: page.title },
 			position: position,
+			height: 36,
+			width: 172,
 		};
 		return obj;
 	});

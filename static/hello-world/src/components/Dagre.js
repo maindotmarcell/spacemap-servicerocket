@@ -16,6 +16,7 @@ import ReactFlow, {
 import getLayoutedElements from './getLayoutedElements.js';
 // import 'reactflow/dist/style.css';
 import PageContext from '../PageContext.js';
+import { invoke } from '@forge/bridge';
 
 import { pageNodes, pageEdges } from './nodes-edges.js';
 
@@ -57,13 +58,17 @@ const LayoutFlow = () => {
 		);
 		setLayoutedNodes(layoutNodes);
 		setLayoutedEdges(layoutEdges);
-		setNodes(layoutNodes);
-		setEdges(layoutEdges);
+
+		// setTarget(null);
+		// dragRef.current = null;
 	}, [initialNodes, initialEdges]);
 
 	useEffect(() => {
-		// whenever the target changes, we swap the colors temporarily
-		// this is just a placeholder, implement your own logic here
+		setNodes(layoutedNodes);
+		setEdges(layoutedEdges);
+	}, [layoutedNodes, layoutedEdges]);
+
+	useEffect(() => {
 		setNodes((nodes) =>
 			nodes.map((node) => {
 				if (target) {
@@ -76,7 +81,7 @@ const LayoutFlow = () => {
 					} else if (node.id === dragRef.current.id && target) {
 					}
 				} else {
-					node.style = { ...node.style, backgroundColor: node.data.color };
+					node.style = { ...node.style, backgroundColor: '#ffffff' };
 					node.data = { ...node.data, label: node.data.label };
 				}
 				return node;
@@ -99,40 +104,54 @@ const LayoutFlow = () => {
 		const centerY = node.position.y + node.height / 2;
 
 		// find a node where the center point is inside
-		const targetNode = nodes.find(
-			(n) =>
+		const targetNode = nodes.find((n) => {
+			// console.log(n);
+			return (
 				centerX > n.position.x &&
 				centerX < n.position.x + n.width &&
 				centerY > n.position.y &&
 				centerY < n.position.y + n.height &&
 				n.id !== node.id // this is needed, otherwise we would always find the dragged node
-		);
+			);
+		});
+		// const targetNode = nodes[1];
+		// let targetNode = {};
+		// for (let i; i < nodes.length; i++) {
+		// 	if (
+		// 		centerX > nodes[i].position.x &&
+		// 		centerX < nodes[i].position.x + nodes[i].width &&
+		// 		centerY > nodes[i].position.y &&
+		// 		centerY < nodes[i].position.y + nodes[i].height &&
+		// 		nodes[i].id !== node.id // this is needed, otherwise we would always find the dragged node
+		// 	) {
+		// 		targetNode = nodes[i];
+		// 	}
+		// }
 
+		// console.log('node: ', node);
+		// console.log('target node: ', targetNode);
+		// console.log(nodes);
 		setTarget(targetNode);
 	};
 
 	const onNodeDragStop = (evt, node) => {
-		// on drag stop, we swap the colors of the nodes
-		// const nodeColor = node.data.label;
-		// if (target) {}
-		// const targetColor = target?.data.label;
-
-		// setNodes((nodes) =>
-		// 	nodes.map((n) => {
-		// 		if (n.id === node.id && target) {
-		// 			n.data = { ...n.data, color: targetColor, label: targetColor };
-		// 		}
-		// 		return n;
-		// 	})
-		// );
-
 		if (target) {
-			console.log(node.id);
-			target ? console.log(target.id) : console.log('no target');
+			// console.log(node.id);
+			// console.log(target.id);
+			// target ? console.log(target.id) : console.log('no target');
+			invoke('movePage', {
+				pageID: node.id,
+				targetID: target.id,
+			})
+				.then((data) => {
+					console.log(data);
+					refreshPages();
+				})
+				.catch((err) => console.log(err));
 		}
 
-		// setTarget(null);
-		// dragRef.current = null;
+		setTarget(null);
+		dragRef.current = null;
 	};
 
 	// End of Drag and drop -----------------------------------------------------------
@@ -166,6 +185,8 @@ const LayoutFlow = () => {
 		},
 		[nodes, edges]
 	);
+
+	// console.log(nodes);
 
 	return (
 		<div className="layoutflow">
