@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { invoke } from '@forge/bridge';
-import PageContext from '../PageContext';
+import PageContext from '../../PageContext';
 
 function TitleForm() {
 	const [pageID, setPageID] = useState();

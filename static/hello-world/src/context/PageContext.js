@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import Pages from './data/Pages';
+import Pages from '../data/Pages';
 
 const PageContext = createContext();
 
