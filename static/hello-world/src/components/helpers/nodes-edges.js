@@ -5,16 +5,22 @@ import Label from '../Label';
 const position = { x: 0, y: 0 };
 const edgeType = 'smoothstep';
 
-export function pageNodes(pages) {
+export function pageNodes(pages, space) {
 	const pageNodes = pages.map((page) => {
 		const obj = {
 			id: page.id,
 			data: {
 				label: (
-					<Label title={page.title} id={page.id} version={page.version}></Label>
+					<Label
+						title={page.title}
+						id={page.id}
+						version={page.version}
+						space={space}
+					></Label>
 				),
 			},
 			position: position,
+			connectable: false,
 			height: 36,
 			width: 172,
 		};

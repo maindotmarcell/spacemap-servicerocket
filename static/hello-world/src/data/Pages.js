@@ -1,7 +1,7 @@
 import rawData from './Data';
 
-export default async function Pages() {
-	const pageObjectArr = await rawData();
+export default async function Pages(space) {
+	const pageObjectArr = await rawData(space);
 	// console.log(pageObjectArr);
 	const pageArr = pageObjectArr.map((page) => {
 		const obj = {};

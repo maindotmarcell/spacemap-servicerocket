@@ -1,14 +1,11 @@
 // import React, { useEffect, useState } from 'react';
 import { invoke } from '@forge/bridge';
 
-async function Data() {
+async function Data(space) {
 	// const [pages, setPages] = useState()
 	let pages = [];
-	await invoke('getPages').then((pagesJSON) => {
-		// console.log(pagesJSON);
+	await invoke('getPages', { space }).then((pagesJSON) => {
 		pages = pagesJSON;
-		// console.log('pages are: ', pages);
-		// setPages(pagesJSON);
 	});
 	return pages;
 }

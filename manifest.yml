@@ -17,6 +17,7 @@ permissions:
   scopes:
     - read:confluence-content.summary
     - write:confluence-content
+    - read:confluence-space.summary
   content:
     styles:
       - 'unsafe-inline'

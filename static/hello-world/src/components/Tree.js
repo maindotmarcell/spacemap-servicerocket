@@ -6,68 +6,80 @@ import React, {
 	useRef,
 } from 'react';
 import ReactFlow, {
-	addEdge,
 	ConnectionLineType,
 	useNodesState,
 	useEdgesState,
 	Controls,
 	MiniMap,
 } from 'react-flow-renderer';
-import getLayoutedElements from './helpers/getLayoutedElements.js';
-// import 'reactflow/dist/style.css';
-import PageContext from '../context/PageContext';
 import { invoke } from '@forge/bridge';
-
+import Select from 'react-select';
+import PageContext from '../context/PageContext';
+import { useSpace } from '../hooks/useSpace.js';
 import { pageNodes, pageEdges } from './helpers/nodes-edges.js';
-
+import getLayoutedElements from './helpers/getLayoutedElements.js';
 import '../index.css';
+// import 'reactflow/dist/style.css';
 
 const LayoutFlow = () => {
-	// setting the nodes and aedges from the fetched data
+	// setting the nodes and edges from the fetched data
 	const [initialNodes, setInitialNodes] = useState([]);
 	const [initialEdges, setInitialEdges] = useState([]);
 
+	// to keep track of current layout
 	const [layoutedNodes, setLayoutedNodes] = useState([]);
 	const [layoutedEdges, setLayoutedEdges] = useState([]);
 
+	// reactflow's own custom hooks render and re-renders nodes
 	const [nodes, setNodes, onNodesChange] = useNodesState([]);
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
+	// to keep track of the direction of the layout
+	const [direction, setDirection] = useState('TB');
+
+	// getting pages from context, application re-renders when pages change (ex: refreshPages)
 	const { pages, refreshPages } = useContext(PageContext);
 
-	// this ref stores the current dragged node
-	const dragRef = useRef(null);
-	// target is the node that the node is dragged over
-	const [target, setTarget] = useState(null);
+	// getting space list
+	const { spaceList } = useSpace();
+
+	const dragRef = useRef(null); // this ref stores the current dragged node
+	const [target, setTarget] = useState(null); // target is the node that the node is dragged over
+
+	// selecting default space, hardcoded for now, will be the first in the space array
+	const [selectedOption, setSelectedOption] = useState({
+		label: 'BC',
+		value: 'BC',
+	});
+
+	// initialising page by calling the refresh function from context
+	useEffect(() => {
+		refreshPages(selectedOption.value);
+	}, [selectedOption.value]);
 
 	useEffect(() => {
-		refreshPages();
-	}, []);
-
-	useEffect(() => {
-		setInitialNodes(pageNodes(pages));
+		setInitialNodes(pageNodes(pages, selectedOption.value));
 		setInitialEdges(pageEdges(pages));
-
-		// console.log(pages);
 	}, [pages]);
 
+	// after nodes are set, we get layout from them
 	useEffect(() => {
 		const [layoutNodes, layoutEdges] = getLayoutedElements(
 			initialNodes,
-			initialEdges
+			initialEdges,
+			direction
 		);
 		setLayoutedNodes(layoutNodes);
 		setLayoutedEdges(layoutEdges);
+	}, [initialNodes, initialEdges, direction]);
 
-		// setTarget(null);
-		// dragRef.current = null;
-	}, [initialNodes, initialEdges]);
-
+	// we set the react flow custom state nodes to trigger render
 	useEffect(() => {
 		setNodes(layoutedNodes);
 		setEdges(layoutedEdges);
 	}, [layoutedNodes, layoutedEdges]);
 
+	// we set the color of the nodes based on which one is the target
 	useEffect(() => {
 		setNodes((nodes) =>
 			nodes.map((node) => {
@@ -77,7 +89,6 @@ const LayoutFlow = () => {
 							...node.style,
 							backgroundColor: '#9CA8B3',
 						};
-						// node.data = { ...node.data, label: "Drop here to move page"};
 					} else if (node.id === dragRef.current.id && target) {
 					}
 				} else {
@@ -88,16 +99,15 @@ const LayoutFlow = () => {
 			})
 		);
 	}, [target]);
-	// console.log('initial: ', initialNodes);
-	// console.log('layouted: ', layoutedNodes);
-	// console.log(initialEdges);
 
 	// DRAG AND DROP, collision detection code here -----------------------------------
 
+	// We extract node that is being dragged
 	const onNodeDragStart = (evt, node) => {
 		dragRef.current = node;
 	};
 
+	// we compare positions to know when they overlay and set target
 	const onNodeDrag = (evt, node) => {
 		// calculate the center point of the node from position and dimensions
 		const centerX = node.position.x + node.width / 2;
@@ -114,38 +124,20 @@ const LayoutFlow = () => {
 				n.id !== node.id // this is needed, otherwise we would always find the dragged node
 			);
 		});
-		// const targetNode = nodes[1];
-		// let targetNode = {};
-		// for (let i; i < nodes.length; i++) {
-		// 	if (
-		// 		centerX > nodes[i].position.x &&
-		// 		centerX < nodes[i].position.x + nodes[i].width &&
-		// 		centerY > nodes[i].position.y &&
-		// 		centerY < nodes[i].position.y + nodes[i].height &&
-		// 		nodes[i].id !== node.id // this is needed, otherwise we would always find the dragged node
-		// 	) {
-		// 		targetNode = nodes[i];
-		// 	}
-		// }
 
-		// console.log('node: ', node);
-		// console.log('target node: ', targetNode);
-		// console.log(nodes);
 		setTarget(targetNode);
 	};
 
+	// we trigger movePage api call when user drops element
 	const onNodeDragStop = (evt, node) => {
 		if (target) {
-			// console.log(node.id);
-			// console.log(target.id);
-			// target ? console.log(target.id) : console.log('no target');
 			invoke('movePage', {
 				pageID: node.id,
 				targetID: target.id,
 			})
 				.then((data) => {
 					console.log(data);
-					refreshPages();
+					refreshPages(selectedOption.value);
 				})
 				.catch((err) => console.log(err));
 		}
@@ -156,17 +148,7 @@ const LayoutFlow = () => {
 
 	// End of Drag and drop -----------------------------------------------------------
 
-	// console.log(nodes);
-	const onConnect = useCallback(
-		(params) =>
-			setEdges((eds) =>
-				addEdge(
-					{ ...params, type: ConnectionLineType.SmoothStep, animated: true },
-					eds
-				)
-			),
-		[]
-	);
+	// called to change layout direction
 	const onLayout = useCallback(
 		(direction) => {
 			const [layoutNodes, layoutEdges] = getLayoutedElements(
@@ -177,25 +159,27 @@ const LayoutFlow = () => {
 			setLayoutedNodes(layoutNodes);
 			setLayoutedEdges(layoutEdges);
 
-			console.log(layoutedNodes);
 			setNodes([...layoutedNodes]);
 			setEdges([...layoutedEdges]);
-			// setNodes(layoutNodes);
-			// setEdges(layoutEdges);
+			setDirection(direction);
 		},
 		[nodes, edges]
 	);
 
-	// console.log(nodes);
-
 	return (
 		<div className="layoutflow">
+			<Select
+				className="select"
+				placeholder="select a space"
+				value={selectedOption}
+				onChange={setSelectedOption}
+				options={spaceList}
+			/>
 			<ReactFlow
 				nodes={nodes}
 				edges={edges}
 				onNodesChange={onNodesChange}
 				onEdgesChange={onEdgesChange}
-				onConnect={onConnect}
 				connectionLineType={ConnectionLineType.SmoothStep}
 				fitView
 				onNodeDrag={onNodeDrag}

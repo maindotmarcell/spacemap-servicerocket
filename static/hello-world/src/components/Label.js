@@ -14,6 +14,7 @@ function Label(props) {
 
 	function hideInput() {
 		setIsInput(false);
+		setNewTitle('');
 	}
 
 	function changeTitle(event) {
@@ -29,7 +30,7 @@ function Label(props) {
 		})
 			.then((data) => {
 				console.log(data);
-				refreshPages();
+				refreshPages(props.space);
 				setNewTitle('');
 			})
 			.catch((err) => console.log(err));
@@ -53,7 +54,9 @@ function Label(props) {
 				</div>
 			) : (
 				<div>
-					<p onDoubleClick={showInput}>{props.title}</p>
+					<p onDoubleClick={showInput} style={{ cursor: 'pointer' }}>
+						{props.title}
+					</p>
 				</div>
 			)}
 		</div>

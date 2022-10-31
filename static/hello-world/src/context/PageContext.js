@@ -6,8 +6,8 @@ const PageContext = createContext();
 export function PageProvider({ children }) {
 	const [pages, setPages] = useState([]);
 
-	const refreshPages = async () => {
-		setPages(await Pages());
+	const refreshPages = async (space) => {
+		setPages(await Pages(space));
 	};
 
 	return (
