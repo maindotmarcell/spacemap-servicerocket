@@ -8,8 +8,10 @@
     "@forge/bridge": "^2.4.0",
     "ag-grid-community": "^28.1.1",
     "ag-grid-react": "^28.1.1",
+    "bootstrap": "^5.2.2",
     "dagre": "^0.8.5",
     "react": "^16.13.1",
+    "react-bootstrap": "^2.5.0",
     "react-dom": "^16.13.1",
     "react-flow-renderer": "^10.3.17",
     "react-select": "^5.5.6"

@@ -1,12 +1,14 @@
 import React, { useContext, useState } from 'react';
 import PageContext from '../context/PageContext';
 import { invoke } from '@forge/bridge';
+import LoadingContext from '../context/LoadingContext';
 
 function Label(props) {
 	const [isInput, setIsInput] = useState(false);
 	const [newTitle, setNewTitle] = useState('');
 
 	const { pages, refreshPages } = useContext(PageContext);
+	const { startLoading, stopLoading } = useContext(LoadingContext);
 
 	function showInput() {
 		setIsInput(true);
@@ -21,7 +23,8 @@ function Label(props) {
 		event.preventDefault();
 		setIsInput(false);
 		// ----------- add api call to change title here ---------
-		console.log('New title: ', newTitle);
+		// console.log('New title: ', newTitle);
+		startLoading();
 		invoke('changeTitle', {
 			pageID: props.id,
 			newTitle: newTitle,
@@ -30,7 +33,7 @@ function Label(props) {
 		})
 			.then((data) => {
 				console.log(data);
-				refreshPages(props.space);
+				refreshPages(props.space).then(() => stopLoading());
 				setNewTitle('');
 			})
 			.catch((err) => console.log(err));

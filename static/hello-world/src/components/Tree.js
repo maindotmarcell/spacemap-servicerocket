@@ -15,10 +15,12 @@ import ReactFlow, {
 import { invoke } from '@forge/bridge';
 import Select from 'react-select';
 import PageContext from '../context/PageContext';
+import LoadingContext from '../context/LoadingContext';
 import { useSpace } from '../hooks/useSpace.js';
 import { pageNodes, pageEdges } from './helpers/nodes-edges.js';
 import getLayoutedElements from './helpers/getLayoutedElements.js';
 import '../index.css';
+import * as ReactBootStrap from 'react-bootstrap';
 // import 'reactflow/dist/style.css';
 
 const LayoutFlow = () => {
@@ -40,6 +42,9 @@ const LayoutFlow = () => {
 	// getting pages from context, application re-renders when pages change (ex: refreshPages)
 	const { pages, refreshPages } = useContext(PageContext);
 
+	// getting loading status from context for rendering
+	const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
+
 	// getting space list
 	const { spaceList } = useSpace();
 
@@ -54,7 +59,8 @@ const LayoutFlow = () => {
 
 	// initialising page by calling the refresh function from context
 	useEffect(() => {
-		refreshPages(selectedOption.value);
+		startLoading();
+		refreshPages(selectedOption.value).then(() => stopLoading());
 	}, [selectedOption.value]);
 
 	useEffect(() => {
@@ -131,13 +137,14 @@ const LayoutFlow = () => {
 	// we trigger movePage api call when user drops element
 	const onNodeDragStop = (evt, node) => {
 		if (target) {
+			startLoading();
 			invoke('movePage', {
 				pageID: node.id,
 				targetID: target.id,
 			})
 				.then((data) => {
 					console.log(data);
-					refreshPages(selectedOption.value);
+					refreshPages(selectedOption.value).then(() => stopLoading());
 				})
 				.catch((err) => console.log(err));
 		}
@@ -168,6 +175,11 @@ const LayoutFlow = () => {
 
 	return (
 		<div className="layoutflow">
+			{isLoading && (
+				<div className='semi-transparent'>
+					<ReactBootStrap.Spinner className="spinner" animation="border" />
+				</div>
+			)}
 			<Select
 				className="select"
 				placeholder="select a space"

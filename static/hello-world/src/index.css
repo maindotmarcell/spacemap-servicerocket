@@ -7,16 +7,15 @@ body,
 	margin: 0;
 }
 
-.wrapper {
-	height: calc(100% - 95px);
-	width: calc(100% - 20px);
-	margin-top: 10px;
-}
-
 .layoutflow {
-	flex-grow: 1;
+	height: calc(100% - 45px);
+	width: calc(100% - 20px);
 	position: relative;
-	height: 100%;
+
+	margin-top: 10px;
+	border: 2px solid #87b2df;
+	border-radius: 10px;
+	overflow: hidden;
 }
 
 .react-flow__node {
@@ -39,12 +38,21 @@ body,
 	margin-right: 10px;
 }
 
-.layoutflow .controls button:first-child {
+.layoutflow .controls button {
 	margin-right: 10px;
+	color: black;
+}
+
+.layoutflow .controls button:hover {
+	background: #fff;
+	color: black;
+	cursor: pointer;
 }
 
 .select {
-	width: 396px;
+	right: -10px;
+	top: 10px;
+	width: 399px;
 	z-index: 9;
 }
 
@@ -60,4 +68,29 @@ input[type='submit'] {
 
 .react-flow__controls {
 	bottom: 60px !important;
+}
+
+.semi-transparent {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+
+	top: 0;
+	left: 0;
+
+	width: 100%;
+	height: 100%;
+	background: rgba(255, 255, 255, 0.5);
+	z-index: 90;
+}
+
+.spinner {
+	position: absolute;
+	margin: auto;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	text-align: center;
+	z-index: 100;
 }
