@@ -53,14 +53,25 @@ const LayoutFlow = () => {
 
 	// selecting default space, hardcoded for now, will be the first in the space array
 	const [selectedOption, setSelectedOption] = useState({
-		label: 'BC',
-		value: 'BC',
+		label: '',
+		value: '',
 	});
+
+	// selecting first space in list when it loads
+	useEffect(() => {
+		if (spaceList.length > 0)
+			setSelectedOption({
+				label: spaceList[0].label,
+				value: spaceList[0].value,
+			});
+	}, [spaceList]);
 
 	// initialising page by calling the refresh function from context
 	useEffect(() => {
-		startLoading();
-		refreshPages(selectedOption.value).then(() => stopLoading());
+		if (spaceList.length > 0) {
+			startLoading();
+			refreshPages(selectedOption.value).then(() => stopLoading());
+		}
 	}, [selectedOption.value]);
 
 	useEffect(() => {
@@ -147,6 +158,17 @@ const LayoutFlow = () => {
 					refreshPages(selectedOption.value).then(() => stopLoading());
 				})
 				.catch((err) => console.log(err));
+		} else {
+			const [layoutNodes, layoutEdges] = getLayoutedElements(
+				initialNodes,
+				initialEdges,
+				direction
+			);
+			setLayoutedNodes(layoutNodes);
+			setLayoutedEdges(layoutEdges);
+
+			setNodes([...layoutedNodes]);
+			setEdges([...layoutedEdges]);
 		}
 
 		setTarget(null);
@@ -176,7 +198,7 @@ const LayoutFlow = () => {
 	return (
 		<div className="layoutflow">
 			{isLoading && (
-				<div className='semi-transparent'>
+				<div className="semi-transparent">
 					<ReactBootStrap.Spinner className="spinner" animation="border" />
 				</div>
 			)}
