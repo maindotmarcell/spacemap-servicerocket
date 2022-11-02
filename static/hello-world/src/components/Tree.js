@@ -11,19 +11,23 @@ import ReactFlow, {
 	useEdgesState,
 	Controls,
 	MiniMap,
+	useReactFlow,
 } from 'react-flow-renderer';
 import { invoke } from '@forge/bridge';
 import Select from 'react-select';
 import PageContext from '../context/PageContext';
 import LoadingContext from '../context/LoadingContext';
-import { useSpace } from '../hooks/useSpace.js';
-import { pageNodes, pageEdges } from './helpers/nodes-edges.js';
-import getLayoutedElements from './helpers/getLayoutedElements.js';
+import { useSpace } from '../helpers/hooks/useSpace.js';
+import { pageNodes, pageEdges } from '../helpers/nodes-edges.js';
+import getLayoutedElements from '../helpers/getLayoutedElements.js';
 import '../index.css';
 import * as ReactBootStrap from 'react-bootstrap';
 // import 'reactflow/dist/style.css';
 
 const LayoutFlow = () => {
+	// getting react flow instance
+	const reactFlowInstance = useReactFlow();
+
 	// setting the nodes and edges from the fetched data
 	const [initialNodes, setInitialNodes] = useState([]);
 	const [initialEdges, setInitialEdges] = useState([]);
@@ -92,6 +96,7 @@ const LayoutFlow = () => {
 
 	// we set the react flow custom state nodes to trigger render
 	useEffect(() => {
+		reactFlowInstance.fitView();
 		setNodes(layoutedNodes);
 		setEdges(layoutedEdges);
 	}, [layoutedNodes, layoutedEdges]);
@@ -188,6 +193,7 @@ const LayoutFlow = () => {
 			setLayoutedNodes(layoutNodes);
 			setLayoutedEdges(layoutEdges);
 
+			reactFlowInstance.fitView();
 			setNodes([...layoutedNodes]);
 			setEdges([...layoutedEdges]);
 			setDirection(direction);

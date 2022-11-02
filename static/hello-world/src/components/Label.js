@@ -10,6 +10,7 @@ function Label(props) {
 	const { pages, refreshPages } = useContext(PageContext);
 	const { startLoading, stopLoading } = useContext(LoadingContext);
 
+
 	function showInput() {
 		setIsInput(true);
 	}

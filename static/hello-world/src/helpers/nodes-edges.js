@@ -1,5 +1,5 @@
 import React from 'react';
-import Label from '../Label';
+import Label from '../components/Label';
 
 // console.log(pages);
 const position = { x: 0, y: 0 };

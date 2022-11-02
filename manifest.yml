@@ -1,10 +1,11 @@
 modules:
-  confluence:spaceSettings:
+  confluence:globalPage:
     - key: birdview-service-rocket-hello-world
       resource: main
       resolver:
         function: resolver
       title: Birdview-Service_Rocket
+      route: birdview
   function:
     - key: resolver
       handler: index.handler
