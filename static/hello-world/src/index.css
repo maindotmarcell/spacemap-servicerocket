@@ -94,3 +94,10 @@ input[type='submit'] {
 	text-align: center;
 	z-index: 100;
 }
+
+.undo-icon {
+	width: 25px;
+	height: 25px;
+	margin-right: 10px;
+	cursor: pointer;
+}

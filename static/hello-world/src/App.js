@@ -4,6 +4,7 @@ import LayoutFlow from './components/Tree';
 import { PageProvider } from './context/PageContext';
 import { LoadingProvider } from './context/LoadingContext';
 import { ReactFlowProvider } from 'react-flow-renderer';
+import { UndoProvider } from './context/UndoContext';
 
 function App() {
 	return (
@@ -11,7 +12,9 @@ function App() {
 			<ReactFlowProvider>
 				<LoadingProvider>
 					<PageProvider>
-						<LayoutFlow />
+						<UndoProvider>
+							<LayoutFlow />
+						</UndoProvider>
 					</PageProvider>
 				</LoadingProvider>
 			</ReactFlowProvider>

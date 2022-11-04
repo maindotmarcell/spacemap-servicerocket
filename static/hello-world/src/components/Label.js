@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import PageContext from '../context/PageContext';
 import { invoke } from '@forge/bridge';
 import LoadingContext from '../context/LoadingContext';
+import UndoContext from '../context/UndoContext';
 
 function Label(props) {
 	const [isInput, setIsInput] = useState(false);
@@ -9,7 +10,7 @@ function Label(props) {
 
 	const { pages, refreshPages } = useContext(PageContext);
 	const { startLoading, stopLoading } = useContext(LoadingContext);
-
+	const { addTitleChange } = useContext(UndoContext);
 
 	function showInput() {
 		setIsInput(true);
@@ -26,14 +27,15 @@ function Label(props) {
 		// ----------- add api call to change title here ---------
 		// console.log('New title: ', newTitle);
 		startLoading();
+		const prevTitle = props.title;
 		invoke('changeTitle', {
 			pageID: props.id,
 			newTitle: newTitle,
-			// version: (parseInt(props.version) + 1).toString(),
 			version: props.version + 1,
 		})
 			.then((data) => {
 				console.log(data);
+				addTitleChange(props.id, prevTitle, props.version + 1);
 				refreshPages(props.space).then(() => stopLoading());
 				setNewTitle('');
 			})

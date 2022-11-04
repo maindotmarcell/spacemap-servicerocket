@@ -18,10 +18,12 @@ import Select from 'react-select';
 import PageContext from '../context/PageContext';
 import LoadingContext from '../context/LoadingContext';
 import { useSpace } from '../helpers/hooks/useSpace.js';
+import UndoContext from '../context/UndoContext';
 import { pageNodes, pageEdges } from '../helpers/nodes-edges.js';
 import getLayoutedElements from '../helpers/getLayoutedElements.js';
 import '../index.css';
 import * as ReactBootStrap from 'react-bootstrap';
+import { RiArrowGoBackLine } from 'react-icons/ri';
 // import 'reactflow/dist/style.css';
 
 const LayoutFlow = () => {
@@ -48,6 +50,9 @@ const LayoutFlow = () => {
 
 	// getting loading status from context for rendering
 	const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
+
+	// getting undo functionality
+	const { undo, eventList, addPageMove } = useContext(UndoContext);
 
 	// getting space list
 	const { spaceList } = useSpace();
@@ -96,7 +101,6 @@ const LayoutFlow = () => {
 
 	// we set the react flow custom state nodes to trigger render
 	useEffect(() => {
-		reactFlowInstance.fitView();
 		setNodes(layoutedNodes);
 		setEdges(layoutedEdges);
 	}, [layoutedNodes, layoutedEdges]);
@@ -160,6 +164,7 @@ const LayoutFlow = () => {
 			})
 				.then((data) => {
 					console.log(data);
+					addPageMove(node.id, node.data.label.props.parent);
 					refreshPages(selectedOption.value).then(() => stopLoading());
 				})
 				.catch((err) => console.log(err));
@@ -193,7 +198,6 @@ const LayoutFlow = () => {
 			setLayoutedNodes(layoutNodes);
 			setLayoutedEdges(layoutEdges);
 
-			reactFlowInstance.fitView();
 			setNodes([...layoutedNodes]);
 			setEdges([...layoutedEdges]);
 			setDirection(direction);
@@ -230,6 +234,21 @@ const LayoutFlow = () => {
 				<MiniMap />
 			</ReactFlow>
 			<div className="controls">
+				{eventList.length > 0 && (
+					<RiArrowGoBackLine
+						className="undo-icon"
+						onClick={async () => {
+							startLoading();
+							try {
+								await undo();
+								await refreshPages(selectedOption.value);
+							} catch (err) {
+								console.log(err);
+							}
+							stopLoading();
+						}}
+					/>
+				)}
 				<button onClick={() => onLayout('TB')}>vertical layout</button>
 				<button onClick={() => onLayout('LR')}>horizontal layout</button>
 			</div>

@@ -16,6 +16,7 @@ export function pageNodes(pages, space) {
 						id={page.id}
 						version={page.version}
 						space={space}
+						parent={page.parent}
 					></Label>
 				),
 			},
