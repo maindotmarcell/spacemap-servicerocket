@@ -1,7 +1,5 @@
 import { invoke } from '@forge/bridge';
-import React, { createContext, useContext, useState } from 'react';
-import LoadingContext from './LoadingContext';
-import PageContext from './PageContext';
+import React, { createContext, useState } from 'react';
 
 const UndoContext = createContext();
 

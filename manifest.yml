@@ -12,6 +12,8 @@ modules:
 resources:
   - key: main
     path: static/hello-world/build
+    tunnel:
+      port: 3000
 app:
   id: ari:cloud:ecosystem::app/9574d15a-4d6a-466b-b4bb-a38d39a0e1fb
 permissions:

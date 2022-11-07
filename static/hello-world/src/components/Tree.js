@@ -11,7 +11,6 @@ import ReactFlow, {
 	useEdgesState,
 	Controls,
 	MiniMap,
-	useReactFlow,
 } from 'react-flow-renderer';
 import { invoke } from '@forge/bridge';
 import Select from 'react-select';
@@ -24,12 +23,10 @@ import getLayoutedElements from '../helpers/getLayoutedElements.js';
 import '../index.css';
 import * as ReactBootStrap from 'react-bootstrap';
 import { RiArrowGoBackLine } from 'react-icons/ri';
-// import 'reactflow/dist/style.css';
+import ErrorMsg from './ErrorMsg/ErrorMsg';
+import ErrorContext from '../context/ErrorContext';
 
 const LayoutFlow = () => {
-	// getting react flow instance
-	const reactFlowInstance = useReactFlow();
-
 	// setting the nodes and edges from the fetched data
 	const [initialNodes, setInitialNodes] = useState([]);
 	const [initialEdges, setInitialEdges] = useState([]);
@@ -50,6 +47,9 @@ const LayoutFlow = () => {
 
 	// getting loading status from context for rendering
 	const { isLoading, startLoading, stopLoading } = useContext(LoadingContext);
+
+	// getting error alert context
+	const { setChildMoveError } = useContext(ErrorContext);
 
 	// getting undo functionality
 	const { undo, eventList, addPageMove } = useContext(UndoContext);
@@ -83,6 +83,7 @@ const LayoutFlow = () => {
 		}
 	}, [selectedOption.value]);
 
+	// setting initial nodes
 	useEffect(() => {
 		setInitialNodes(pageNodes(pages, selectedOption.value));
 		setInitialEdges(pageEdges(pages));
@@ -163,8 +164,12 @@ const LayoutFlow = () => {
 				targetID: target.id,
 			})
 				.then((data) => {
+					if (data.statusCode === 400) {
+						setChildMoveError(true);
+					} else {
+						addPageMove(node.id, node.data.label.props.parent);
+					}
 					console.log(data);
-					addPageMove(node.id, node.data.label.props.parent);
 					refreshPages(selectedOption.value).then(() => stopLoading());
 				})
 				.catch((err) => console.log(err));
@@ -207,6 +212,7 @@ const LayoutFlow = () => {
 
 	return (
 		<div className="layoutflow">
+			<ErrorMsg />
 			{isLoading && (
 				<div className="semi-transparent">
 					<ReactBootStrap.Spinner className="spinner" animation="border" />
