@@ -1,4 +1,4 @@
-# Service Rocket Birdview
+# Service Rocket: Space Map
 This project is a Software Development Studio assignment, in which our group created an application that visually and hierarchically represents pages within confluence spaces. The application also enables the user to make updates to the pages via drag&drop and double clicking on nodes. The data is fetched from the [confluence api](https://developer.atlassian.com/cloud/confluence/rest/v1/intro/).
 
 ## Tech Stack
@@ -53,7 +53,6 @@ The following (3) members have contributed the following features to the applica
 
 ### Ryan (Xin) and Colin (Xinlei)
 - Space selection drop-down and filter
-- On-boarding / tutorial
 - Styling (majority)
 - Responsiveness (app width)
 - UI bug fixes
