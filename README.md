@@ -1,37 +1,60 @@
-# Forge Hello World
+# Service Rocket Birdview
+This project is a Software Development Studio assignment, in which our group created an application that visually and hierarchically represents pages within confluence spaces. The application also enables the user to make updates to the pages via drag&drop and double clicking on nodes. The data is fetched from the [confluence api](https://developer.atlassian.com/cloud/confluence/rest/v1/intro/).
 
-This project contains a Forge app written in Javascript that displays `Hello World!` in a Confluence space settings. 
+## Tech Stack
 
-See [developer.atlassian.com/platform/forge/](https://developer.atlassian.com/platform/forge) for documentation and tutorials explaining Forge.
+- Hosting and Deployment: [Forge](https://developer.atlassian.com/platform/forge/)
+- UI Framework/Library: [React](https://reactjs.org/)
+- Rendering Library for interactive nodes: [React Flow](https://reactflow.dev/)
 
-## Requirements
+## Unique Selling Points
 
-See [Set up Forge](https://developer.atlassian.com/platform/forge/set-up-forge/) for instructions to get set up.
+- Visual overview of pages
+- Minimalistic / Approachable UI/UX design
+- Drag and Drop
+- Undo *(Algorithm created purely through our own approach. Using a custom stack data structure that pushes successful update events such as title changes and page moves. Pops them from the stack, and executes them in reverse when the user presses the undo button)*
+- "Bubblewrapped" user interaction (nothing can go wrong)
+- Tutorial / On-boarding
 
-## Quick start
+## Roadmap and Possible Improvements
 
-- Modify your app by editing the files in `static/hello-world/src/`.
+- Adding full CRUD functionality (creating and deleting new nodes, with added undo functionality)
+- Navigating to pages
+- More page information accessible in nodes such as comments
+- Optimising tree updates (making them before response has arrive from server, using loading spinners to indicate incomplete update)
+- Searching and filtering among nodes
+- Centering nodes on layout and space changes
+- Vertical (height) responsiveness
 
-- Build your app (inside of the `static/hello-world` directory):
-```
-npm run build
-```
+## Group Members
 
-- Deploy your app by running:
-```
-forge deploy
-```
+- **Marcell Munnich** *Team leader and lead developer*
+- **Avishti Sharma** *SCRUM master*
+-  **Trang Thi Le** *Business analyst*
+- **Xin Chen** *Software Developer*
+- **Xinlei hu** *Software Developer*
+- **Phuong Anh Dang** *Business analyst*
+- **Anton Horlanchuk** *Jack of all trades*
 
-- Install your app in an Atlassian site by running:
-```
-forge install
-```
+## Code Contributions
 
-### Notes
-- Use the `forge deploy` command when you want to persist code changes.
-- Use the `forge install` command when you want to install the app on a new site.
-- Once the app is installed on a site, the site picks up the new app changes you deploy without needing to rerun the install command.
+The following (3) members have contributed the following features to the application:
 
-## Support
+### Marcell
+- Forge deployment and installation configuration
+- Fetching and rendering pages as a tree
+- Moving pages via drag and drop
+- Title change via double click
+- Undo
+- Alerts (for unintended user actions)
+- Loading Spinner
+- Forge API calls and backend functions for other contributor's features
+- Styling (minor changes)
 
-See [Get help](https://developer.atlassian.com/platform/forge/get-help/) for how to get help and provide feedback.
+### Ryan (Xin) and Colin (Xinlei)
+- Space selection drop-down and filter
+- On-boarding / tutorial
+- Styling (majority)
+- Responsiveness (app width)
+- UI bug fixes
+
